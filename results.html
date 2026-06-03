@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang=en><head><meta charset=utf-8>
+<meta name=viewport content="width=device-width, initial-scale=1">
+<title>Pitcher ER — results</title>
+<style>
+  :root{--bg:#0d1117;--fg:#c9d1d9;--mut:#8b949e;--ac:#58a6ff;--ok:#3fb950;--warn:#d29922}
+  body{font:15px/1.65 ui-sans-serif,system-ui,sans-serif;max-width:860px;margin:0 auto;
+    padding:40px 18px;color:#1f2328}
+  h1{font-size:24px;margin:0 0 4px} .sub{color:#57606a;margin:0 0 24px}
+  .callout{background:#fff8c5;border:1px solid #d4a72c55;border-radius:8px;
+    padding:14px 18px;margin:18px 0}
+  .callout b{color:#9a6700}
+  .dataset{background:#f6f8fa;border:1px solid #d0d7de;border-radius:8px;
+    padding:14px 18px;margin:18px 0;font-size:14px}
+  .dataset .pill{display:inline-block;background:#0d1117;color:#c9d1d9;border-radius:20px;
+    padding:2px 10px;margin:2px 4px 2px 0;font-size:12px}
+  .card{background:var(--bg);color:var(--fg);border-radius:10px;padding:20px 22px;margin:18px 0}
+  .card.err{background:#2d1416;color:#ffb4ab}
+  .card h2{font-size:17px;margin:0 0 2px;color:#fff}
+  .card .meta{color:var(--mut);margin:0 0 14px;font-size:13px}
+  table{width:100%;border-collapse:collapse;font-size:14px}
+  th{text-align:left;color:var(--mut);font-weight:600;
+    border-bottom:1px solid #30363d;padding:6px 8px}
+  td{padding:6px 8px;border-bottom:1px solid #21262d}
+  td.v{font-variant-numeric:tabular-nums;font-weight:700;color:#fff;width:90px}
+  td.ref{color:var(--mut);width:150px} td.note{color:var(--ac);font-size:13px}
+  .pitchers{color:#57606a;font-size:12px;margin-top:24px;line-height:1.8}
+  footer{color:#57606a;font-size:13px;margin-top:28px;
+    border-top:1px solid #d0d7de;padding-top:14px}
+</style></head>
+<body>
+  <h1>MLB Pitcher Earned-Runs — held-out results</h1>
+  <p class=sub>Generated 2026-06-03 · real data via MLB Stats API + Statcast + Open-Meteo
+    · <a href="demo.html" style="color:#0969da">▶ interactive per-start demo</a></p>
+
+  <div class=callout>
+    <b>Read this first.</b> Per-start ER is one of the noisiest targets in baseball
+    (BABIP/sequencing/luck dominate). "80% accuracy" is not attainable as exact ER.
+    The honest, concrete metric is the <b>±1 ER band hit-rate</b> (realistic ceiling
+    ~60–65%); true 80%+ only appears in the low-information ±2 band. Every number below
+    is shown next to a season-rate baseline so the model's marginal value is unambiguous.
+  </div>
+
+  <div class=dataset>
+    <b>Dataset:</b> 3223 starts · 30 pitchers · seasons 2022–2026
+    <span class=pill>大谷翔平 Ohtani: ✓ included</span>
+    <span class=pill>山本由伸 Yamamoto: ✓ included</span>
+    <br><span style="color:#9a6700">Note: 2026 is an in-progress season as of the generated
+    date — its test set is small/early and should be read as preliminary. Ohtani pitched
+    2022–23, missed 2024 (elbow surgery), returned 2025+; Yamamoto is MLB from 2024 (NPB
+    before), so neither contributes early-season rows. Both are individually small-sample.</span>
+  </div>
+
+  
+    <section class=card>
+      <h2>Train 2022–2023 → Test 2024</h2>
+      <p class=meta>1559 training starts · 784 test starts ·
+         29 pitchers in test</p>
+      <table>
+        <thead><tr><th>metric</th><th>model</th><th>reference</th><th></th></tr></thead>
+        <tbody><tr><td>MAE (ER)</td><td class=v>1.559</td><td class=ref>baseline 1.594</td><td class=note>↓ better; beats baseline</td></tr><tr><td>RMSE (ER)</td><td class=v>1.998</td><td class=ref></td><td class=note>↓ better</td></tr><tr><td>±1 ER hit-rate</td><td class=v>55.7%</td><td class=ref>baseline 51.9%</td><td class=note>primary 'accuracy'; target ~60-65%</td></tr><tr><td>±2 ER hit-rate</td><td class=v>83.0%</td><td class=ref></td><td class=note>low-information</td></tr><tr><td>over/under @ 2.5</td><td class=v>58.8%</td><td class=ref>break-even 52.4%</td><td class=note>market-style binary</td></tr><tr><td>P10–P90 coverage</td><td class=v>79.8%</td><td class=ref>target ~80%</td><td class=note>interval calibration</td></tr></tbody>
+      </table>
+    </section>
+    <section class=card>
+      <h2>Train 2022–2024 → Test 2025</h2>
+      <p class=meta>2343 training starts · 642 test starts ·
+         26 pitchers in test</p>
+      <table>
+        <thead><tr><th>metric</th><th>model</th><th>reference</th><th></th></tr></thead>
+        <tbody><tr><td>MAE (ER)</td><td class=v>1.609</td><td class=ref>baseline 1.608</td><td class=note>↓ better</td></tr><tr><td>RMSE (ER)</td><td class=v>2.028</td><td class=ref></td><td class=note>↓ better</td></tr><tr><td>±1 ER hit-rate</td><td class=v>55.3%</td><td class=ref>baseline 53.1%</td><td class=note>primary 'accuracy'; target ~60-65%</td></tr><tr><td>±2 ER hit-rate</td><td class=v>82.6%</td><td class=ref></td><td class=note>low-information</td></tr><tr><td>over/under @ 2.5</td><td class=v>58.1%</td><td class=ref>break-even 52.4%</td><td class=note>market-style binary</td></tr><tr><td>P10–P90 coverage</td><td class=v>82.2%</td><td class=ref>target ~80%</td><td class=note>interval calibration</td></tr></tbody>
+      </table>
+    </section>
+    <section class=card>
+      <h2>Train 2022–2025 → Test 2026</h2>
+      <p class=meta>2985 training starts · 238 test starts ·
+         24 pitchers in test</p>
+      <table>
+        <thead><tr><th>metric</th><th>model</th><th>reference</th><th></th></tr></thead>
+        <tbody><tr><td>MAE (ER)</td><td class=v>1.509</td><td class=ref>baseline 1.599</td><td class=note>↓ better; beats baseline</td></tr><tr><td>RMSE (ER)</td><td class=v>1.979</td><td class=ref></td><td class=note>↓ better</td></tr><tr><td>±1 ER hit-rate</td><td class=v>57.6%</td><td class=ref>baseline 52.9%</td><td class=note>primary 'accuracy'; target ~60-65%</td></tr><tr><td>±2 ER hit-rate</td><td class=v>84.9%</td><td class=ref></td><td class=note>low-information</td></tr><tr><td>over/under @ 2.5</td><td class=v>62.2%</td><td class=ref>break-even 52.4%</td><td class=note>market-style binary</td></tr><tr><td>P10–P90 coverage</td><td class=v>80.3%</td><td class=ref>target ~80%</td><td class=note>interval calibration</td></tr></tbody>
+      </table>
+    </section>
+
+  <p class=pitchers><b>Pitchers:</b> Aaron Nola, Bailey Ober, Chris Sale, Corbin Burnes, Dane Dunning, Framber Valdez, George Kirby, Gerrit Cole, Jacob Lopez, Jameson Taillon, Jordan Montgomery, José Berríos, Kevin Gausman, Kyle Gibson, Lance Lynn, Logan Gilbert, Logan Webb, Martín Pérez, Merrill Kelly, Miles Mikolas, Nathan Eovaldi, Patrick Corbin, Seth Lugo, Shohei Ohtani, Sonny Gray, Tarik Skubal, Yoshinobu Yamamoto, Yusei Kikuchi, Zac Gallen, Zack Wheeler</p>
+  <footer>Model: LightGBM quantile regressors (P10/P50/P90), leakage-safe shift(1)
+  rolling features, time-based walk-forward validation. Source &amp; method:
+  a private repository.</footer>
+</body></html>
